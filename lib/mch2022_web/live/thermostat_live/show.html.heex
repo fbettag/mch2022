@@ -1,0 +1,33 @@
+<h1>Show Thermostat</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.thermostat_show_path(@socket, :show, @thermostat)}>
+    <.live_component
+      module={Mch2022Web.ThermostatLive.FormComponent}
+      id={@thermostat.id}
+      title={@page_title}
+      action={@live_action}
+      thermostat={@thermostat}
+      return_to={Routes.thermostat_show_path(@socket, :show, @thermostat)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @thermostat.name %>
+  </li>
+
+  <li>
+    <strong>Temperature:</strong>
+    <span id="temperature"><%= @thermostat.temperature %></span>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.thermostat_show_path(@socket, :edit, @thermostat), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.thermostat_index_path(@socket, :index) %></span> |
+<span><button id="incr" phx-click="incr">+</button></span> |
+<span><button id="decr" phx-click="decr">-</button></span>

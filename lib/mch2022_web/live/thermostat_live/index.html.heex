@@ -1,0 +1,41 @@
+<h1>Listing Thermostats</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.thermostat_index_path(@socket, :index)}>
+    <.live_component
+      module={Mch2022Web.ThermostatLive.FormComponent}
+      id={@thermostat.id || :new}
+      title={@page_title}
+      action={@live_action}
+      thermostat={@thermostat}
+      return_to={Routes.thermostat_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Temperature</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="thermostats">
+    <%= for thermostat <- @thermostats do %>
+      <tr id={"thermostat-#{thermostat.id}"}>
+        <td><%= thermostat.name %></td>
+        <td><%= thermostat.temperature %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.thermostat_show_path(@socket, :show, thermostat) %></span>
+          <span><%= live_patch "Edit", to: Routes.thermostat_index_path(@socket, :edit, thermostat) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: thermostat.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Thermostat", to: Routes.thermostat_index_path(@socket, :new) %></span>
